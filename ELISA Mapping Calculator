@@ -1,0 +1,123 @@
+import math
+# Online Python - IDE, Editor, Compiler, Interpreter
+#Nw, 5-10-22
+#
+#       - To calculate sample locations for ELISA to allow for multiple
+# individuals to work simultaneously.
+#
+#objects needed for later
+samples = 0
+sampEnt = 0
+delayStart= 0
+indict = {}
+multiTotal = 0
+
+#math Function
+def calculate(samples):
+    
+    #plates to use
+    pmath = samples/96
+    #exact number bug
+    if pmath == 1:
+        pmath = 0
+    #plate number
+    plate = math.floor(pmath)
+    #attempt to add in controls per multi plate
+    samples+=(4*plate)
+    pupmath = samples/96
+    
+    #large number bug?
+    plateFloor = math.floor(plate)
+    pupFloor = math.floor(pupmath)
+    if plateFloor != pupFloor:
+        samples+=4
+        plateFloor+=1
+        pupmath = samples/96
+    
+    #wells on last plate
+    well = (pupmath-plateFloor)*96
+    wint = round(well)
+    
+    #Row by letter
+    rowmath = wint/12
+    row = math.ceil(rowmath)
+    alph = ["0","A","B","C","D","E","F","G","H"]
+    
+    #single well in a row
+    rowfloor = math.floor(rowmath)
+    column = rowmath-rowfloor
+    #to fix well 0 bug
+    if column == 0:
+        column = 1
+    
+    col = round(column*12)
+
+    #answer
+    print("Last sample is ",alph[row],col, "on Plate",plateFloor+1)
+    print("--------------------")
+    return col
+
+
+
+
+indict = {"a": 0,"b": 1,"c": 2,"d": 3,"e": 4,"f": 5,"g": 6,"h": 7}
+#interface
+print("Which row do you wish to start on?")
+start = input()
+startlow = start.lower()
+#start = "a"
+
+#check for valid entries
+entry = indict.get(startlow)
+if entry == None:
+    print("Entry Rejected. Assuming start on row A")
+    
+else:
+    print("Entry Accepted.")
+    #math for delayed start, Added 4 for controls on delay, 6-28
+    delayStart = int(entry)*12+4
+
+
+#prompt for multiple cases
+
+print("Would you like to calculate multiple cases' positions? (Y/N)")
+multiynFirst = input()
+multiyn = multiynFirst.lower()
+
+
+if multiyn =="y":
+    print("List how many samples in each case, seperated by commas. 50,75,10,etc...")
+    multisamp = ()
+    multisamp = input()
+    caseSplit = multisamp.split(",")
+    lengthcS = len(caseSplit)
+    firCounter = 0
+    action = 0
+    for i in range(lengthcS):
+        action += int(caseSplit[i])
+        if firCounter == 0:
+            action+= delayStart
+            firCounter = 1
+            print("run",i+1)
+            wellNumb = calculate(action)
+        else:
+            print("run",i+1)
+            wellNumbX = calculate(action)
+        
+    
+elif multiyn == "n":
+    print("Continuing as a single case")
+    print("How many samples? ")
+    sampEnt = input()
+    sampGlobal = int(sampEnt)+delayStart
+    wellGlobal = calculate(sampGlobal)
+
+
+else:
+    print("Invalid entry, will assume single case.")
+    print("How many samples?")
+    sampEnt = input()
+    sampGlobal = int(sampEnt)+delayStart
+    wellGlobal = calculate(sampGlobal)
+
+print("-*-"*7,"end","-*-"*7)
