@@ -1,0 +1,68 @@
+# Reading Music Study app
+#
+# Test user on Treble and Bass clef by randomly choosing a note and drawing it on the staff.
+#Fw, 10-9-23
+#
+import random as rand
+#drawing function, parameters = correct note, location in the clef list, clef note is in
+def drawer(noted,locod,uscale):
+    print("\n")
+    #staff array, but replaces note at correct location with marker
+    #spaces, lines for staff and for extreme notes outside of staff
+    snote = ["-"," ","-"," ","-"," ","-"," ","-"," ","-"," ","-"," ","-"]
+    snote[locod] = "-O-"
+    if uscale == "T":
+        for i in range(15):
+            staff = "{line}{note1}{line}"
+            linevar = "--"
+            if i<3 or (i+1)%2==0 or i>13:
+                linevar = " "
+            print(staff.format(note1 = snote[i], line = linevar))
+    elif uscale == "B":
+        for i in range(15):
+            staff = "{line}{note1}{line}"
+            linevar = "--"
+            if i<2 or (i+1)%2==0 or i>11:
+                linevar = " "
+            print(staff.format(note1 = snote[i], line = linevar))
+    print("\n")
+    return(noted,locod)
+note = 0
+score = 0
+total = 1
+go = True
+while go == True:
+    print("Which clef would you like to study? (T/B)")
+    clefin = input()
+    treble = ["C6","B5","A5","G5","F5","E5","D5","C5","B4","A4","G4","F4","E4","D4","C4"]
+    bass = ["C4","B3","A3","G3","F3","E3","D3","C3","B2","A2","G2","F2","E2","D2","C2"]
+    noteint = rand.randint(0,14)
+    #Finding note and its location in clef from user
+    if clefin.upper() == "T":
+        note = treble[noteint]
+        loco = treble.index(note)
+    elif clefin.upper() == "B":
+        note = bass[noteint]
+        loco = bass.index(note)
+    else:
+        print("Sorry, invalid entry.")
+        go = False
+        break
+    drawer(note,loco,clefin.upper())
+    print("Which note is this?")
+    usera = input()
+    if usera.upper() == note:
+        print("Correct!")
+        score+=1
+    else:
+        print("Sorry, it was ",note)
+    print("Would you like another note? (Y/N)")
+    another = input()
+    if another.upper() == "N":
+        print("Okay!"," Here is your score for this session: ",score,"/",total,"\nGoodbye")
+        go = False
+    else:
+        print("Study Session is continuing...")
+        total+=1
+
+
