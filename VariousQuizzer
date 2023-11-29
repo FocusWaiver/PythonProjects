@@ -1,0 +1,111 @@
+# Various quizzer
+# 11-19-23, fw
+
+
+import math
+import random
+
+go = True
+start = True
+count = 0
+score = 0
+
+
+# to do
+#  find kmi accuracy issue, add more categories
+
+
+def scoreMessage(score, count):
+    if score / count == 0:
+        print("Ouch! Maybe you'll get one next time")
+    elif score / count < 0.3:
+        print("Hmm, better luck next time.")
+    elif score / count < 0.7:
+        print("Not too bad, but there is room for improvement.")
+    elif count - score == 1:
+        print("Nice Job! One off from perfect!")
+    elif count == score:
+        print("Perfect Score! Fantastic Job!")
+    else:
+        print("Good Job!  Your percentage was ", round(score / count, 2))
+    print("You scored ", score, "/", count, "\n", "Goodbye!")
+
+#check input when floats are required
+def numberAns(count):
+    raw = input()
+    try:
+        user = float(raw)
+    except:
+        if raw != "quit":
+            print("*Error: input unable to be a float*\n")
+            count -= 1
+        user = raw
+    return count, user, raw
+
+
+# km to mi, option 1
+def kmi():
+    r = random.randint(1, 20)
+    i = int(r * 5)
+    print('How many miles is ', i, 'km?')
+    ans = round(i * (0.621371),1)
+    return ans
+
+# C to F, option 2
+def c_to_f():
+    c = random.randint(-8, 20)
+    j = int(c * 5)
+    print("What is ", j, "C, in F?")
+    ans_c = round(j * (9 / 5) + 32,0)
+    print(ans_c)
+    return ans_c
+
+# trivia?
+
+
+#dialog for user
+print("Enter 'quit' to end program and receive score. \n")
+
+print("""Choose your concept: \n
+1: Convert Kilometer to Miles
+2: Convert Celsius to Fahrenheit
+3: Other
+""")
+#menu loop
+while start:
+    concept = input()
+    if concept == 'quit':
+        print('Okay, Goodbye')
+        start = False
+        break
+    elif concept == '1' or '2':
+        start = False
+        break
+    else:
+        print('Entry not Valid, Try again')
+
+#main loop
+while go:
+    if concept == '1':
+        correct_ans = kmi()
+        count, user, raw = numberAns(count)
+
+    if concept == '2':
+        correct_ans = c_to_f()
+        count, user, raw = numberAns(count)
+
+    #quit from menu
+    if concept == 'quit':
+        break
+    #quit from quizzer
+    if raw == 'quit':
+        scoreMessage(score, count)
+        break
+
+    count += 1
+    # feedback to user per answer
+    if user == correct_ans:
+        print("Correct!")
+        score += 1
+    else:
+        print('Sorry, the correct answer was ', correct_ans)
