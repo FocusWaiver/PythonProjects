@@ -12,7 +12,7 @@ score = 0
 
 
 # to do
-#  find kmi accuracy issue, add more categories
+# add more categories
 
 
 def scoreMessage(score, count):
