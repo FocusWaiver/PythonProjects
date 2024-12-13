@@ -6,11 +6,15 @@ import math
 quicklog = []
 durolist = []
 
+#file repetoire
+total_duration = "TimeTrackerTotalDurationLog.txt"
+cache = "TimeTrackerCache.txt"
+
 
 def report(duration, start_date):
     duroAdd = 0
     end_date = int(start_date)-int(duration)
-    with open("TimeTrackerTotalDurationLog.txt") as td_log:
+    with open(total_duration) as td_log:
         for entry in (td_log.readlines()):
             entry_split = entry.split("/")
             if int(entry_split[0]) >= end_date:
@@ -24,14 +28,14 @@ def report(duration, start_date):
 def timelogger(user, entry):
     timeUser = str(user)
     t_entry = str(entry)
-    fileAdd = open("TimeTrackerCache.txt", "a")
+    fileAdd = open(cache, "a")
     #fileAdd.write(timeUser)
     fileAdd.write(t_entry)
     fileAdd.write("\n")
     fileAdd.close()
 
 def sessionLength(y_day):
-    with open("TimeTrackerCache.txt") as logs:
+    with open(cache) as logs:
         for line in (logs.readlines()[-2:]):
             quicklog.append(line)
         dif_sec = (int(quicklog[1])-int(quicklog[0]))
@@ -53,7 +57,7 @@ def sessionLength(y_day):
 
 
     #open save file for log of total session duration
-    sess = open("TimeTrackerTotalDurationLog.txt", "a")
+    sess = open(total_duration, "a")
     total_entry = str(y_day)+"/"+str(dif_sec)
     sess.write(total_entry)
     sess.write("\n")
@@ -61,7 +65,7 @@ def sessionLength(y_day):
 
 #data logs
 #File chosen by user input by category
-file= open("TimeTrackerCache.txt", "r")
+file= open(cache, "r")
 data = file.read()
 entries = data.split("\n")
 file.close()
