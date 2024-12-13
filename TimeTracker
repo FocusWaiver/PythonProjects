@@ -1,0 +1,110 @@
+# TimeTracker.py
+#	Easily log amount of time spent on personal growth
+# fw, 9/30/2024
+import time
+import math
+quicklog = []
+durolist = []
+
+
+def report(duration, start_date):
+    duroAdd = 0
+    end_date = int(start_date)-int(duration)
+    with open("TimeTrackerTotalDurationLog.txt") as td_log:
+        for entry in (td_log.readlines()):
+            entry_split = entry.split("/")
+            if int(entry_split[0]) >= end_date:
+                duroAdd += int(entry_split[1])
+        print("Over the last ",duration,"days, you've studied", duroAdd, "seconds.")
+
+
+
+
+
+def timelogger(user, entry):
+    timeUser = str(user)
+    t_entry = str(entry)
+    fileAdd = open("TimeTrackerCache.txt", "a")
+    #fileAdd.write(timeUser)
+    fileAdd.write(t_entry)
+    fileAdd.write("\n")
+    fileAdd.close()
+
+def sessionLength(y_day):
+    with open("TimeTrackerCache.txt") as logs:
+        for line in (logs.readlines()[-2:]):
+            quicklog.append(line)
+        dif_sec = (int(quicklog[1])-int(quicklog[0]))
+        #possible new function for H:M:S read out
+        if dif_sec <= 59:
+            print("You studied for ", dif_sec, "seconds.")
+        elif dif_sec <= 3600:
+            p_min = int(round(dif_sec/60))
+            print("You studied for about ",p_min,"minutes")
+        else:
+            float_hour = dif_sec/3600
+            p_hour = int(math.floor(dif_sec/3600))
+            p_min = int(math.floor((float_hour-p_hour)*60))
+            float_min = (float_hour-p_hour)*60
+            p_sec = int(round((float_min-p_min)*60))
+            print(float_hour,p_hour,p_min,float_min,p_sec)
+            print("You studied for ",p_hour,"hours, ",p_min,"minutes, and ",p_sec,"seconds")
+
+
+
+    #open save file for log of total session duration
+    sess = open("TimeTrackerTotalDurationLog.txt", "a")
+    total_entry = str(y_day)+"/"+str(dif_sec)
+    sess.write(total_entry)
+    sess.write("\n")
+    sess.close()
+
+#data logs
+#File chosen by user input by category
+file= open("TimeTrackerCache.txt", "r")
+data = file.read()
+entries = data.split("\n")
+file.close()
+
+#What's the time?
+x = time.time()
+add = int(round(x,0))
+#day
+y = time.localtime()
+y_day = y[7]
+
+#menu
+print("Welcome to TimeTracker")
+print("0=start session, 1=end session, 2=get report")
+user = input()
+try:
+    user = int(user)
+except:
+    print("Sorry, you must enter a number")
+    user = 10
+
+if user <= 1:
+    timelogger(user,add)
+    if user == 0:
+        print("Your learning session has started. Enjoy!")
+    if user == 1:
+        sessionLength(y_day)
+elif user == 2:
+    print("Reporting...")
+    print("How many days ago do you want to start the report range")
+    duration = input()
+    try:
+        try_duro = int(duration)
+    except:
+        print("Sorry, must be an integer")
+    report(duration,y_day)
+else:
+    print("Invalid entry. Try again")
+
+#to do
+#File variables
+#Keep case testing to stress test, then remove extra prints
+# report function
+#need a H:M:S separate function?
+
+
