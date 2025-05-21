@@ -5,8 +5,17 @@
 #
 
 #path for files
-path = "UPDATE"
-#import os
+path = "/storage/emulated/0/Documents/Pydroid3/mobilePython/"
+import os
+#print(os.getcwd())
+
+def dejunk(dirty):
+    junk = ["[","]","'","(",")"," "]
+    for j in junk:
+    	clean = dirty.replace(j,"")
+    	dirty = clean
+    return clean
+	
 
 def FileError(playfile):
     #Can this be the file name?
@@ -17,8 +26,8 @@ def FileError(playfile):
             print("Sorry, there are invalid characters in your filename. Try again")
             return True
     #Does this file already exist?
-    #exist = os.path.exists(playfilefull)
-    exist = False
+    exist = os.path.exists(playfile)
+    #exist = False
     if exist:
         print("Sorry, that file name already exists.")
         return True
@@ -39,47 +48,54 @@ def newGame():
     if mistakes:
         playfile = input()
     #create new file with name
-    #open path+playfiletxt
+    playf= open(path+playfiletxt, "x")
+    playf.close()
     #write playlist to file
     for each in playlist:
         entry = each+"-0"
         roundzero.append(entry)
     #upload roundzero
+    playrz = open(path+playfiletxt, "w")
+    playrz.write(str(playlist)+"\n")
+    playrz.write(str(roundzero))
+    playrz.close()
     print("Great, your save file is called ", playfiletxt)
     print("Have Fun!")
     
 def contGame():
     #!
     #change this for less typing between rounds
-    contfilename = "game.txt"
+    contfilename = "GinGame51925https://youtu.be/K5KVEU3aaeQ?si=r2ifwliXevGaMVBV.txt"
     #!
     
     #testing list
-    content = ("n,k,m","['n-0','k-0','m-0']","['n-2','k-6','m-1']","['n-22','k-46','m-10']")
+    #content = ("n,k,m","['n-0','k-0','m-0']","['n-2','k-6','m-1']","['n-22','k-46','m-10']")
     updatelist = []
-    #contf = open(game.txt)
-    #content = contf.readlines()
-    playerlist = content[0]
-    playsplit = playerlist.split(",")
-    currentscore = content[-1]
-    #make a function to use multiple times?
-    junk = ["[","]","'"]
-    for j in junk:
-        currentscore = currentscore.replace(j,"")
-    print(currentscore)
+    cplayerlist = []
+    contf = open(contfilename,"r")
+    contfsplit = contf.read()
+    contf.close()
+    content = contfsplit.split("\n")
+    currentscorej = content[-1]
+    currentscore = dejunk(currentscorej)
     currsplit = currentscore.split(",")
     for i in currsplit:
         separate = i.split("-")
-        player = separate[0]
-        score = int(separate[1])
-        print("what was ",player, "'s score this round?")
+        playerd = separate[0]
+        playerc = dejunk(playerd)
+        scorec = dejunk(separate[1])
+        score = int(scorec)
+        print("what was ",playerc, "'s score this round?")
         newscore = input()
         #try int
         newint = int(newscore)
         addition = str(score+newint)
-        updatelist.append(player+"-"+addition)
+        updatelist.append(playerc+"-"+addition)
     print("The scores for round ", len(content)-1, "are", updatelist)
     #upload
+    roundf = open(contfilename,"a")
+    roundf.write("\n"+str(updatelist))
+    roundf.close()
         
     
     
@@ -87,8 +103,8 @@ def contGame():
 print("Welcome!")
 #New or continuing game
 print("0 for a new game, 1 to continue a past game")
-#gameAns = input()
-gameAns = "1"
+gameAns = input()
+#gameAns = "3"
 if gameAns == "0":
     newGame()
 elif gameAns == "1":
@@ -97,3 +113,4 @@ else:
     print("Sorry, invalid input.")
 
 #pickup a different saved game? Can python print folder contents?
+
