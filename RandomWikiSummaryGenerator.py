@@ -4,12 +4,16 @@ from datetime import date
 
 # Asks for a number of random articles from Wikipedia and writes the summary to wikifile.txt
 
+# ADD your EMAIL to wikipediaapi function.
+#create a txt file or change name in wikiCall function
+
 def wikiCall(page_name):
-    wiki_wiki = wikipediaapi.Wikipedia('ForFun (focuswaiver7@gmail.com)', 'en')
+    wiki_wiki = wikipediaapi.Wikipedia('ForFun (YOUR_EMAIL_HERE)', 'en')
 
     page_py = wiki_wiki.page(page_name)
 
     # wikifile
+    #make sure this text file exists in your directory
     wf = open('wikifile.txt', 'a')
     today = str(date.today())
     wf.write("Entry made "+today+ "\n")
